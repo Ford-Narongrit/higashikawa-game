@@ -93,7 +93,6 @@ export const copy = {
     joinedCount: (n: number) => `${n}人`,
     joinedLabel: "さんか",
     teamsWaiting: "チーム はっぴょう まで まってね",
-    comingSoon: "じゅんびちゅう",
     leaderboard: "スコア",
     soundOff: "クリックで おと ON",
     kind: { admin: "ゲーム", box: "プレゼント", photo: "しゃしん" },

@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { AnimatePresence, motion } from "framer-motion";
 import QRCode from "qrcode";
 import { copy } from "@/lib/copy";
@@ -8,6 +9,9 @@ import { enableSound } from "@/lib/sound";
 import type { GameState, ScreenPlayer, Team, TeamScore } from "@/lib/types";
 import { useLiveRefresh } from "@/lib/useLiveRefresh";
 import { Leaderboard } from "./Leaderboard";
+
+// three.js only runs in the browser; also keeps it out of the bundle until the tree is shown.
+const TreeView = dynamic(() => import("./tree/TreeView").then((m) => m.TreeView), { ssr: false });
 
 type ScreenData = { state: GameState; scores: TeamScore[]; players: ScreenPlayer[] };
 
@@ -28,7 +32,9 @@ export function ScreenApp() {
 
   return (
     <div
-      className="fixed inset-0 overflow-hidden bg-[#07070c] text-white select-none"
+      className={`fixed inset-0 overflow-hidden bg-[#07070c] text-white select-none ${
+        data?.state.screen_view === "tree" ? "cursor-none" : ""
+      }`}
       onDoubleClick={() =>
         document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()
       }
@@ -48,15 +54,12 @@ export function ScreenApp() {
               <TeamsView players={data.players} revealed={data.state.teams_revealed} />
             )}
             {data.state.screen_view === "leaderboard" && <Leaderboard />}
-            {data.state.screen_view === "tree" && (
-              <div className="flex h-full items-center justify-center text-[4vw] text-zinc-500">
-                {copy.screen.comingSoon}
-              </div>
-            )}
+            {data.state.screen_view === "tree" && <TreeView />}
           </motion.div>
         </AnimatePresence>
       )}
-      <SoundToggle />
+      {/* The tree is the group-photo backdrop: no UI and no cursor on top of it. */}
+      {data?.state.screen_view !== "tree" && <SoundToggle />}
     </div>
   );
 }
