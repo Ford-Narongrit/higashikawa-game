@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "demo:scores": "tsx --env-file=.env.local scripts/demo-scores.ts",
-    "purge-photos": "tsx --env-file=.env.local scripts/purge-photos.ts"
+    "purge-photos": "tsx --env-file=.env.local scripts/purge-photos.ts",
+    "load-test": "tsx --env-file=.env.local scripts/load-test.ts"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",

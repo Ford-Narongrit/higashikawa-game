@@ -121,7 +121,14 @@ function BoxReveal({ points, team, onClose }: { points: number; team: Team; onCl
         className="absolute flex flex-col items-center gap-2"
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1, x: negative ? [0, -12, 12, -12, 12, 0] : 0 }}
-        transition={{ delay: 1.5, type: "spring", stiffness: 220, damping: 12 }}
+        transition={{
+          delay: 1.5,
+          type: "spring",
+          stiffness: 220,
+          damping: 12,
+          // springs only accept two keyframes; the shake needs a tween
+          x: { type: "tween", duration: 0.6, delay: 1.8 },
+        }}
       >
         <span className="text-3xl font-black text-white">{negative ? copy.box.unlucky : copy.box.congrats}</span>
         <span

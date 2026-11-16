@@ -166,5 +166,10 @@ export const adminCopy = {
   photoPoints: "คะแนน/รูป",
   maxPhotos: "รูป/คน",
   photoCap: "เพดานคะแนนรูป/ทีม (ว่าง = ไม่จำกัด)",
+
+  resetTitle: "รีเซ็ตข้อมูลทั้งหมด",
+  resetHelp:
+    "ลบผู้เล่น คะแนน รหัสกล่อง และรูปทั้งหมด (รวมไฟล์ใน Storage) แล้วกลับไปก่อนเปิดเผยทีม · เก็บตั้งค่ารางวัล/รูปไว้ · พิมพ์ RESET เพื่อยืนยัน",
+  resetButton: "ลบทั้งหมด",
   printCount: (n: number) => `${n} รหัส · 12 ใบต่อหน้า A4`,
 } as const;

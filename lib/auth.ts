@@ -28,16 +28,24 @@ export function verifyPin(pin: string, hash: string): Promise<boolean> {
   return bcrypt.compare(pin, hash);
 }
 
-/** Resolves the player from `Authorization: Bearer <token>`, or null. */
+/**
+ * Resolves the player from `Authorization: Bearer <token>`; null only when the token is truly unknown.
+ * A database error throws (→ 500) instead of returning null: a 401 makes the phone forget its token,
+ * and a network blip must never log a player out.
+ */
 export async function playerFromRequest(request: Request) {
   const auth = request.headers.get("authorization");
   const token = auth?.startsWith("Bearer ") ? auth.slice(7).trim() : "";
   if (!token) return null;
-  const { data } = await supabaseAdmin()
-    .from("players")
-    .select(`${PLAYER_COLUMNS}, last_seen_at`)
-    .eq("token_hash", hashToken(token))
-    .maybeSingle();
+  const lookup = () =>
+    supabaseAdmin()
+      .from("players")
+      .select(`${PLAYER_COLUMNS}, last_seen_at`)
+      .eq("token_hash", hashToken(token))
+      .maybeSingle();
+  let { data, error } = await lookup();
+  if (error) ({ data, error } = await lookup()); // one retry for transient failures
+  if (error) throw new Error(`player lookup failed: ${error.message}`);
   return data;
 }
 

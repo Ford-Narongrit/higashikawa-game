@@ -9,53 +9,30 @@
  */
 import { createInterface } from "node:readline/promises";
 import { createClient } from "@supabase/supabase-js";
+import { listAllPhotoPaths, removePhotoFiles } from "../lib/storage-purge";
 
-const BUCKET = "photos";
 const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
   auth: { persistSession: false },
 });
 
-/** Files live at <player_id>/<uuid>.jpg, so list each top-level folder. */
-async function listAllPaths(): Promise<string[]> {
-  const paths: string[] = [];
-  const { data: folders, error } = await db.storage.from(BUCKET).list("", { limit: 10_000 });
-  if (error) throw error;
-  for (const folder of folders ?? []) {
-    if (folder.id) {
-      paths.push(folder.name); // a file at the root
-      continue;
-    }
-    for (let offset = 0; ; offset += 1000) {
-      const { data: files, error: e } = await db.storage.from(BUCKET).list(folder.name, { limit: 1000, offset });
-      if (e) throw e;
-      paths.push(...(files ?? []).map((f) => `${folder.name}/${f.name}`));
-      if (!files || files.length < 1000) break;
-    }
-  }
-  return paths;
-}
-
 async function main() {
-  const paths = await listAllPaths();
+  const paths = await listAllPhotoPaths(db);
   const { count } = await db.from("photos").select("id", { count: "exact", head: true });
   console.log(`Found ${paths.length} files in storage and ${count ?? 0} rows in photos.`);
   if (!paths.length && !count) return console.log("Nothing to delete.");
 
   if (!process.argv.includes("--yes")) {
     const rl = createInterface({ input: process.stdin, output: process.stdout });
-    const answer = await rl.question('Type DELETE to permanently remove all photos: ');
+    const answer = await rl.question("Type DELETE to permanently remove all photos: ");
     rl.close();
     if (answer.trim() !== "DELETE") return console.log("Cancelled.");
   }
 
-  for (let i = 0; i < paths.length; i += 100) {
-    const { error } = await db.storage.from(BUCKET).remove(paths.slice(i, i + 100));
-    if (error) throw error;
-  }
+  await removePhotoFiles(db, paths);
   const { error } = await db.from("photos").delete().not("id", "is", null);
   if (error) throw error;
 
-  const left = await listAllPaths();
+  const left = await listAllPhotoPaths(db);
   console.log(`Done. Files left in storage: ${left.length}.`);
 }
 

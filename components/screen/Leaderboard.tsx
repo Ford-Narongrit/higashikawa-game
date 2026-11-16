@@ -257,7 +257,13 @@ function EventOverlay({ item, thumb }: { item: QueueItem; thumb?: string }) {
         style={{ background: `${team.color}ee` }}
         initial={{ scale: 0.3, opacity: 0 }}
         animate={{ scale: 1, opacity: 1, x: negative ? [0, -20, 20, -20, 20, 0] : 0 }}
-        transition={{ delay: item.kind === "box" && item.count === 1 ? 1.3 : 0, type: "spring", stiffness: 200 }}
+        transition={{
+          delay: item.kind === "box" && item.count === 1 ? 1.3 : 0,
+          type: "spring",
+          stiffness: 200,
+          // springs only accept two keyframes; the shake needs a tween
+          x: { type: "tween", duration: 0.6, delay: item.kind === "box" && item.count === 1 ? 1.6 : 0.3 },
+        }}
       >
         <span className="text-[3.5vw] font-black">
           {team.symbol} {team.name_ja}

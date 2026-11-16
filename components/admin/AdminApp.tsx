@@ -7,6 +7,7 @@ import { useLiveRefresh } from "@/lib/useLiveRefresh";
 import { api, btn, card } from "./api";
 import { BoxAdmin } from "./BoxAdmin";
 import { PhotoReview } from "./PhotoReview";
+import { ResetPanel } from "./ResetPanel";
 import { ScorePanel } from "./ScorePanel";
 
 
@@ -84,6 +85,7 @@ export function AdminApp() {
       <PhotoReview onError={setError} />
       <BoxAdmin onError={setError} />
       <PlayersPanel onError={setError} />
+      <ResetPanel onError={setError} />
     </main>
   );
 }
