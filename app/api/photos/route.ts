@@ -37,11 +37,18 @@ export async function POST(request: Request) {
 
   const db = supabaseAdmin();
   const { path, thumb_path } = photoPaths(player.id, body.id);
-  const { data: files } = await db.storage.from(BUCKET).list(player.id, { search: body.id });
-  const names = new Set((files ?? []).map((f) => `${player.id}/${f.name}`));
-  if (!names.has(path) || !names.has(thumb_path)) {
-    return Response.json({ error: "not_uploaded" }, { status: 409 });
-  }
+  // exists() reads one object's info; list() runs a search that the storage API serialises under
+  // load (100 concurrent submits took ~29s with list, see scripts/load-test.ts).
+  const bucket = db.storage.from(BUCKET);
+  const present = await Promise.all(
+    [path, thumb_path].map((p) =>
+      bucket.exists(p).then(
+        (r) => r.data,
+        () => false,
+      ),
+    ),
+  );
+  if (!present.every(Boolean)) return Response.json({ error: "not_uploaded" }, { status: 409 });
 
   const { data, error } = await db.rpc("submit_photo", {
     p_player_id: player.id,
