@@ -7,6 +7,7 @@ import { clearToken, loadToken, postJson, saveToken } from "@/lib/token";
 import type { MeResponse, Room } from "@/lib/types";
 import { useLiveRefresh } from "@/lib/useLiveRefresh";
 import { BoxPanel } from "./BoxPanel";
+import { PhotoPanel } from "./PhotoPanel";
 import { ScoreList } from "./ScoreList";
 import { BigButton, ErrorText, Field, inputClass, RoomPicker, Screen } from "./ui";
 
@@ -283,6 +284,7 @@ export function PlayerApp({ initialBoxCode }: { initialBoxCode?: string } = {}) 
           {copy.revealed.hello(me!.player.name)}
         </p>
         <BoxPanel token={token!} open={me!.state.box_open} team={team} initialCode={initialBoxCode} />
+        <PhotoPanel token={token!} open={me!.state.photo_open} />
         <ScoreList scores={me!.scores} myTeamId={team.id} />
       </Screen>
     </div>

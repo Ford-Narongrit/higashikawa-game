@@ -64,6 +64,18 @@ export const copy = {
     tapToClose: "タップで とじる",
   },
 
+  photo: {
+    title: "しゃしん",
+    pick: (left: number) => `しゃしんを おくる（あと ${left}まい）`,
+    uploading: "おくっています…",
+    retry: "もう いちど",
+    failed: "おくれませんでした。↻ を おしてね",
+    badFile: "この しゃしんは つかえません",
+    limit: (max: number) => `もう おくれません（${max}まいまで）`,
+    closed: "いまは おくれません",
+    status: { pending: "チェックちゅう", approved: "OK！", rejected: "NG" },
+  },
+
   errors: {
     nameRequired: "なまえを いれてね",
     roomRequired: "クラスを えらんでね",
@@ -146,5 +158,14 @@ export const adminCopy = {
   save: "บันทึก",
   saved: "บันทึกแล้ว",
   print: "พิมพ์",
+
+  photos: "ตรวจรูป",
+  photoTabs: { pending: "รอตรวจ", approved: "ผ่าน", rejected: "ไม่ผ่าน" },
+  photoKeys: "คีย์ลัด: ← → เลือก · A/Enter ผ่าน · X/Backspace ไม่ผ่าน · Space ดูรูปใหญ่",
+  noPhotos: "ไม่มีรูป",
+  rejectApproved: "รูปนี้ผ่านไปแล้ว — ไม่ผ่าน จะยกเลิกคะแนนของรูปนี้ด้วย ยืนยัน?",
+  photoPoints: "คะแนน/รูป",
+  maxPhotos: "รูป/คน",
+  photoCap: "เพดานคะแนนรูป/ทีม (ว่าง = ไม่จำกัด)",
   printCount: (n: number) => `${n} รหัส · 12 ใบต่อหน้า A4`,
 } as const;

@@ -6,6 +6,7 @@ import { ROOMS, SCREEN_VIEWS, type AdminPlayer, type GameState, type Room } from
 import { useLiveRefresh } from "@/lib/useLiveRefresh";
 import { api, btn, card } from "./api";
 import { BoxAdmin } from "./BoxAdmin";
+import { PhotoReview } from "./PhotoReview";
 import { ScorePanel } from "./ScorePanel";
 
 
@@ -80,6 +81,7 @@ export function AdminApp() {
       )}
 
       <ScorePanel onError={setError} />
+      <PhotoReview onError={setError} />
       <BoxAdmin onError={setError} />
       <PlayersPanel onError={setError} />
     </main>

@@ -73,6 +73,19 @@ export function Leaderboard() {
   const busy = useRef(false);
   const lastId = useRef<number | null>(null);
   const settled = useRef<Record<number, number>>(EMPTY);
+  const [thumbs, setThumbs] = useState<Record<string, string>>({});
+
+  // Signed thumbnail URLs for queued photo events, fetched as soon as they're queued.
+  const loadThumbs = useCallback(async (ids: string[]) => {
+    if (!ids.length) return;
+    try {
+      const res = await fetch(`/api/screen/thumbs?ids=${ids.join(",")}`, { cache: "no-store" });
+      if (res.ok) {
+        const map = await res.json();
+        setThumbs((t) => ({ ...t, ...map }));
+      }
+    } catch {}
+  }, []);
 
   const pump = useCallback(() => {
     const step = () => {
@@ -122,7 +135,9 @@ export function Leaderboard() {
         lastId.current = maxId; // first load: show current totals without replaying history
       } else if (maxId > lastId.current) {
         const prev = lastId.current;
-        queue.current.push(...data.filter((e) => e.id > prev && !e.voided).map(toItem));
+        const fresh = data.filter((e) => e.id > prev && !e.voided);
+        loadThumbs(fresh.flatMap((e) => (e.photo_id ? [e.photo_id] : [])));
+        queue.current.push(...fresh.map(toItem));
         lastId.current = maxId;
       }
       settled.current = totalsUpTo(data, lastId.current);
@@ -135,7 +150,7 @@ export function Leaderboard() {
         sync();
       }
     }
-  }, [pump]);
+  }, [pump, loadThumbs]);
 
   useLiveRefresh(sync, { tables: ["score_events"], connectedMs: 10_000, fallbackMs: 5_000 });
 
@@ -178,7 +193,7 @@ export function Leaderboard() {
         })}
       </div>
 
-      <AnimatePresence>{current && <EventOverlay key={current.key} item={current} />}</AnimatePresence>
+      <AnimatePresence>{current && <EventOverlay key={current.key} item={current} thumb={current.photo_id ? thumbs[current.photo_id] : undefined} />}</AnimatePresence>
     </div>
   );
 }
@@ -187,7 +202,7 @@ function pointsText(points: number) {
   return points >= 0 ? `+${points}` : `${points}`;
 }
 
-function EventOverlay({ item }: { item: QueueItem }) {
+function EventOverlay({ item, thumb }: { item: QueueItem; thumb?: string }) {
   const team = teamById(item.team_id)!;
   const teamIndex = TEAMS.findIndex((t) => t.id === team.id);
   const negative = item.points < 0;
@@ -219,12 +234,21 @@ function EventOverlay({ item }: { item: QueueItem }) {
 
       {item.kind === "photo" && (
         <motion.div
-          className="absolute text-[8vw]"
-          initial={{ left: "46vw", top: "30vh", scale: 1.6, opacity: 1 }}
-          animate={{ left: `${4 + teamIndex * 23.75 + 10.4 - 4}vw`, top: "70vh", scale: 0.4, opacity: 0 }}
-          transition={{ duration: 1.1, ease: "easeIn", delay: 0.3 }}
+          className="absolute w-[14vw] text-center text-[8vw]"
+          initial={{ left: "43vw", top: "28vh", scale: 1.4, opacity: 1 }}
+          animate={{ left: `${4 + teamIndex * 23.75 + 10.4 - 7}vw`, top: "70vh", scale: 0.3, opacity: 0 }}
+          transition={{ duration: 1.1, ease: "easeIn", delay: 0.5 }}
         >
-          📸
+          {thumb && item.count === 1 ? (
+            // eslint-disable-next-line @next/next/no-img-element -- signed private URL
+            <img
+              src={thumb}
+              alt=""
+              className="aspect-square w-full rounded-[1vw] border-[0.4vw] border-white object-cover shadow-2xl"
+            />
+          ) : (
+            "📸"
+          )}
         </motion.div>
       )}
 
