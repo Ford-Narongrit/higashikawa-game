@@ -48,6 +48,22 @@ export const copy = {
     scores: "スコア",
   },
 
+  box: {
+    title: "プレゼント",
+    open: "あける！",
+    scanHint: "カメラで はこの QR を よみとっても OK",
+    notYet: "まだ あけられません。まってね",
+    sixChars: "コードは 6もじ です",
+    used: "このコードは もう つかわれました",
+    invalid: "このコードは ありません。もう いちど みてね",
+    closed: "いまは あけられません",
+    noTeam: "チームが きまってから あけてね",
+    afterReveal: "チームが きまったら プレゼントを あけられます",
+    congrats: "おめでとう！",
+    unlucky: "ざんねん…",
+    tapToClose: "タップで とじる",
+  },
+
   errors: {
     nameRequired: "なまえを いれてね",
     roomRequired: "クラスを えらんでね",
@@ -115,4 +131,20 @@ export const adminCopy = {
   kinds: { admin: "เกม", box: "กล่อง", photo: "รูป" },
   exportScores: "Export คะแนน (ข้อความ)",
   exportCopied: "คัดลอกแล้ว — วางใน LINE/โน้ตได้เลย",
+
+  boxes: "กล่องของขวัญ",
+  boxStats: (total: number, used: number) => `รหัสทั้งหมด ${total} · ใช้แล้ว ${used}`,
+  generateCodes: "สร้างรหัส",
+  boxCountInvalid: "ใส่จำนวน 1–500",
+  printBatch: (n: number) => `พิมพ์ชุดที่เพิ่งสร้าง (${n})`,
+  printUnused: "พิมพ์ทุกรหัสที่ยังไม่ใช้",
+  showList: "ดูรายการรหัส",
+  hideList: "ซ่อนรายการ",
+  prizeTable: "ตารางรางวัล (คะแนน / น้ำหนัก → %)",
+  prizeInvalid: "ตารางรางวัลไม่ถูกต้อง: คะแนนต้องเป็นจำนวนเต็ม น้ำหนักต้องมากกว่า 0",
+  expectedPoints: (n: number) => `คะแนนเฉลี่ยต่อกล่อง ≈ ${n}`,
+  save: "บันทึก",
+  saved: "บันทึกแล้ว",
+  print: "พิมพ์",
+  printCount: (n: number) => `${n} รหัส · 12 ใบต่อหน้า A4`,
 } as const;

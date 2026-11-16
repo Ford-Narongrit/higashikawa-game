@@ -5,6 +5,7 @@ import { TEAMS, teamById } from "@/lib/teams";
 import { ROOMS, SCREEN_VIEWS, type AdminPlayer, type GameState, type Room } from "@/lib/types";
 import { useLiveRefresh } from "@/lib/useLiveRefresh";
 import { api, btn, card } from "./api";
+import { BoxAdmin } from "./BoxAdmin";
 import { ScorePanel } from "./ScorePanel";
 
 
@@ -79,6 +80,7 @@ export function AdminApp() {
       )}
 
       <ScorePanel onError={setError} />
+      <BoxAdmin onError={setError} />
       <PlayersPanel onError={setError} />
     </main>
   );

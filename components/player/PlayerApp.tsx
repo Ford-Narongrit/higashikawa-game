@@ -6,12 +6,13 @@ import { teamById } from "@/lib/teams";
 import { clearToken, loadToken, postJson, saveToken } from "@/lib/token";
 import type { MeResponse, Room } from "@/lib/types";
 import { useLiveRefresh } from "@/lib/useLiveRefresh";
+import { BoxPanel } from "./BoxPanel";
 import { ScoreList } from "./ScoreList";
 import { BigButton, ErrorText, Field, inputClass, RoomPicker, Screen } from "./ui";
 
 type View = "boot" | "join" | "conflict" | "rejoin" | "pin" | "home";
 
-export function PlayerApp() {
+export function PlayerApp({ initialBoxCode }: { initialBoxCode?: string } = {}) {
   const [view, setView] = useState<View>("boot");
   const [token, setToken] = useState<string | null>(null);
   const [me, setMe] = useState<MeResponse | null>(null);
@@ -246,6 +247,7 @@ export function PlayerApp() {
           <h1 className="text-5xl font-black">{copy.waiting.title}</h1>
           <p className="text-xl text-zinc-300">{copy.waiting.sub}</p>
           <p className="text-3xl font-bold">{copy.waiting.count(me!.playerCount)}</p>
+          {initialBoxCode && <p className="rounded-xl bg-zinc-800 px-4 py-3">🎁 {copy.box.afterReveal}</p>}
           <p className="text-lg text-zinc-400">
             {copy.revealed.hello(me!.player.name)}（{me!.player.room}）
           </p>
@@ -280,6 +282,7 @@ export function PlayerApp() {
         <p className="text-center text-2xl font-bold text-white drop-shadow">
           {copy.revealed.hello(me!.player.name)}
         </p>
+        <BoxPanel token={token!} open={me!.state.box_open} team={team} initialCode={initialBoxCode} />
         <ScoreList scores={me!.scores} myTeamId={team.id} />
       </Screen>
     </div>
