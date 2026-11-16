@@ -19,7 +19,7 @@
  * team get one through the admin API (it never presses "reveal").
  */
 import { createClient } from "@supabase/supabase-js";
-import { removePhotoFiles } from "../lib/storage-purge";
+import { deleteTestPlayers } from "./test-data";
 
 const arg = (name: string, fallback?: string) => {
   const i = process.argv.indexOf(`--${name}`);
@@ -99,24 +99,8 @@ function fakeJpeg(bytes: number) {
 
 // ---- cleanup ----------------------------------------------------------------
 async function cleanup() {
-  const { data: players } = await db.from("players").select("id").like("name", `${PREFIX}%`).limit(5000);
-  const ids = (players ?? []).map((p) => p.id);
-  if (!ids.length) return console.log("  nothing to clean");
-  for (let i = 0; i < ids.length; i += 100) {
-    const chunk = ids.slice(i, i + 100);
-    const { data: photos } = await db.from("photos").select("path, thumb_path").in("player_id", chunk);
-    const paths = (photos ?? []).flatMap((p) => [p.path, p.thumb_path]);
-    // also catch files whose upload finished but were never registered
-    for (const id of chunk) {
-      const { data: files } = await db.storage.from("photos").list(id, { limit: 100 });
-      paths.push(...(files ?? []).map((f) => `${id}/${f.name}`));
-    }
-    if (paths.length) await removePhotoFiles(db, [...new Set(paths)]);
-    await db.from("score_events").delete().in("player_id", chunk);
-    await db.from("box_codes").delete().in("redeemed_by", chunk);
-    await db.from("players").delete().in("id", chunk);
-  }
-  console.log(`  removed ${ids.length} LT- players with their photos, scores and box codes`);
+  const n = await deleteTestPlayers(db, PREFIX);
+  console.log(n ? `  removed ${n} LT- players with their photos, scores and box codes` : "  nothing to clean");
 }
 
 // ---- main -------------------------------------------------------------------

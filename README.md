@@ -35,6 +35,7 @@ SQL อยู่ใน `supabase/migrations/` — รันตามลำดั
 |---|---|
 | `npm run load-test` | ทดสอบโหลดกับ URL จริง (ดูตัวเลือกในไฟล์ `scripts/load-test.ts`) แล้วลบข้อมูลทดสอบเอง |
 | `npm run load-test -- --clean` | ลบผู้เล่น `LT-…` ที่ค้างจากการทดสอบ |
+| `npm run seed-photos` | ใส่รูปปลอม 60 รูป (approved) ดูต้นไม้/คิวตรวจรูป (`-- --count 450`, `-- --status pending\|mixed`, `-- --dir ~/Pictures/x`, `-- --clean`) |
 | `npm run demo:scores` | ส่งคะแนนปลอมเพื่อดูแอนิเมชันกระดานคะแนน (`-- flood`, `-- clean`) |
 | `npm run purge-photos` | ลบรูปทั้งหมด (หลังงาน) |
 
