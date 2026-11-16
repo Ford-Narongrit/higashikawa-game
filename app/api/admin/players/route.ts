@@ -37,5 +37,7 @@ export async function POST(request: Request) {
     p_token_hash: hashToken(generateToken()),
   });
   if (error) return Response.json({ error: error.message }, { status: 500 });
-  return Response.json({ player: data, pin });
+  // Never send pin_hash / token_hash to the browser.
+  const { id, room, team_id, created_at, last_seen_at } = data;
+  return Response.json({ player: { id, name: data.name, room, team_id, created_at, last_seen_at }, pin });
 }
