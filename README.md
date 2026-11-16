@@ -17,6 +17,16 @@ npm run dev                  # http://localhost:3000
 
 SQL อยู่ใน `supabase/migrations/` — รันตามลำดับชื่อไฟล์ใน Supabase Dashboard → SQL Editor
 
+## Checklist วันงาน
+
+- [ ] **Wi-Fi ในยิม**: เอามือถือต่อ Wi-Fi แล้วเปิด `https://<project-ref>.supabase.co/auth/v1/health`
+      ต้องเห็น `{"message":"No API key found..."}` ถ้าโหลดค้าง แปลว่า Wi-Fi บล็อก Supabase → ขอ IT ให้อนุญาต `*.supabase.co` หรือให้ผู้เล่นใช้เน็ตมือถือ
+      (realtime ใช้ไม่ได้ แต่ระบบยัง polling ทุก 5 วินาทีผ่าน Vercel)
+- [ ] **DNS ของ Mac**: System Settings → Wi-Fi → Details → DNS ควรเป็นอัตโนมัติ
+      (เคยเจอ 1.1.1.1 / 8.8.8.8 ถูกบล็อกในบางเครือข่าย ทำให้ต่อ Supabase ไม่ได้)
+- [ ] Supabase free project หยุดเองถ้าไม่ได้ใช้ 7 วัน — เปิดเช็กวันก่อนงาน
+- [ ] เปิด `/api/health` บน URL จริง ทุกช่องต้องเป็น `true`
+
 ## หลังจบงาน
 
 - [ ] export คะแนนสุดท้ายจาก `/admin` เก็บไว้
