@@ -31,6 +31,7 @@ export type MeResponse = {
   player: Me;
   state: GameState;
   playerCount: number;
+  scores: TeamScore[];
 };
 
 export type ScreenPlayer = {
@@ -42,3 +43,19 @@ export type ScreenPlayer = {
 };
 
 export type AdminPlayer = ScreenPlayer & { last_seen_at: string };
+
+export type TeamScore = { team_id: number; score: number };
+
+export type ScoreKind = "admin" | "box" | "photo";
+
+export type ScoreEvent = {
+  id: number;
+  team_id: number;
+  points: number;
+  kind: ScoreKind;
+  label: string | null;
+  player_name: string | null;
+  photo_id: string | null;
+  voided: boolean;
+  created_at: string;
+};

@@ -6,6 +6,7 @@ import { teamById } from "@/lib/teams";
 import { clearToken, loadToken, postJson, saveToken } from "@/lib/token";
 import type { MeResponse, Room } from "@/lib/types";
 import { useLiveRefresh } from "@/lib/useLiveRefresh";
+import { ScoreList } from "./ScoreList";
 import { BigButton, ErrorText, Field, inputClass, RoomPicker, Screen } from "./ui";
 
 type View = "boot" | "join" | "conflict" | "rejoin" | "pin" | "home";
@@ -48,7 +49,7 @@ export function PlayerApp() {
   const waitingForTeam = !me?.player.team_id;
   useLiveRefresh(refresh, {
     enabled: !!token && (view === "home" || view === "pin"),
-    connectedMs: waitingForTeam ? 5_000 : 15_000,
+    connectedMs: waitingForTeam ? 5_000 : 10_000,
   });
 
   function signIn(newToken: string) {
@@ -279,6 +280,7 @@ export function PlayerApp() {
         <p className="text-center text-2xl font-bold text-white drop-shadow">
           {copy.revealed.hello(me!.player.name)}
         </p>
+        <ScoreList scores={me!.scores} myTeamId={team.id} />
       </Screen>
     </div>
   );

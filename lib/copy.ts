@@ -45,6 +45,7 @@ export const copy = {
   revealed: {
     yourTeam: "あなたの チーム",
     hello: (name: string) => `${name}さん`,
+    scores: "スコア",
   },
 
   errors: {
@@ -65,6 +66,9 @@ export const copy = {
     joinedLabel: "さんか",
     teamsWaiting: "チーム はっぴょう まで まってね",
     comingSoon: "じゅんびちゅう",
+    leaderboard: "スコア",
+    soundOff: "クリックで おと ON",
+    kind: { admin: "ゲーム", box: "プレゼント", photo: "しゃしん" },
   },
 } as const;
 
@@ -99,4 +103,16 @@ export const adminCopy = {
   deleteConfirm: (name: string) => `ลบ ${name}? (คะแนนที่ทีมได้ไปแล้วจะยังอยู่)`,
   noTeam: "ยังไม่มีทีม",
   total: (n: number) => `ทั้งหมด ${n} คน`,
+
+  scores: "คะแนน",
+  points: "คะแนน",
+  label: "ข้อความ เช่น ゲーム1 1位",
+  addScore: "เพิ่มคะแนน",
+  scoreInvalid: "เลือกทีมและใส่คะแนนเป็นจำนวนเต็มก่อน",
+  void: "ยกเลิก",
+  restore: "คืนค่า",
+  voidConfirm: (label: string, points: number) => `ยกเลิก "${label}" (${points})?`,
+  kinds: { admin: "เกม", box: "กล่อง", photo: "รูป" },
+  exportScores: "Export คะแนน (ข้อความ)",
+  exportCopied: "คัดลอกแล้ว — วางใน LINE/โน้ตได้เลย",
 } as const;

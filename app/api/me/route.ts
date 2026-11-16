@@ -1,5 +1,6 @@
 import { playerFromRequest } from "@/lib/auth";
 import { gameState, playerCount } from "@/lib/players";
+import { teamScores } from "@/lib/scores";
 import { supabaseAdmin } from "@/lib/supabase/server";
 import type { MeResponse } from "@/lib/types";
 
@@ -18,11 +19,12 @@ export async function GET(request: Request) {
       .eq("id", player.id);
   }
 
-  const [state, count] = await Promise.all([gameState(), playerCount()]);
+  const [state, count, scores] = await Promise.all([gameState(), playerCount(), teamScores()]);
   const body: MeResponse = {
     player: { id: player.id, name: player.name, room: player.room, team_id: player.team_id },
     state,
     playerCount: count,
+    scores,
   };
   return Response.json(body, { headers: { "Cache-Control": "no-store" } });
 }

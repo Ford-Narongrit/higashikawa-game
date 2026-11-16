@@ -4,10 +4,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import QRCode from "qrcode";
 import { copy } from "@/lib/copy";
 import { TEAMS } from "@/lib/teams";
-import type { GameState, ScreenPlayer, Team } from "@/lib/types";
+import { enableSound } from "@/lib/sound";
+import type { GameState, ScreenPlayer, Team, TeamScore } from "@/lib/types";
 import { useLiveRefresh } from "@/lib/useLiveRefresh";
+import { Leaderboard } from "./Leaderboard";
 
-type ScreenData = { state: GameState; players: ScreenPlayer[] };
+type ScreenData = { state: GameState; scores: TeamScore[]; players: ScreenPlayer[] };
 
 export function ScreenApp() {
   const [data, setData] = useState<ScreenData | null>(null);
@@ -45,7 +47,8 @@ export function ScreenApp() {
             {data.state.screen_view === "teams" && (
               <TeamsView players={data.players} revealed={data.state.teams_revealed} />
             )}
-            {(data.state.screen_view === "leaderboard" || data.state.screen_view === "tree") && (
+            {data.state.screen_view === "leaderboard" && <Leaderboard />}
+            {data.state.screen_view === "tree" && (
               <div className="flex h-full items-center justify-center text-[4vw] text-zinc-500">
                 {copy.screen.comingSoon}
               </div>
@@ -53,7 +56,27 @@ export function ScreenApp() {
           </motion.div>
         </AnimatePresence>
       )}
+      <SoundToggle />
     </div>
+  );
+}
+
+/** Browsers block audio until a click, so sound starts OFF and Ford clicks once to enable. */
+function SoundToggle() {
+  const [on, setOn] = useState(false);
+  return (
+    <button
+      onClick={() => {
+        enableSound(!on);
+        setOn(!on);
+      }}
+      onDoubleClick={(e) => e.stopPropagation()}
+      className={`absolute bottom-[1.5vh] right-[1vw] z-50 rounded-full bg-white/10 px-[1vw] py-[0.6vh] text-[1.4vw] transition ${
+        on ? "opacity-20 hover:opacity-100" : "opacity-90"
+      }`}
+    >
+      {on ? "🔊" : `🔇 ${copy.screen.soundOff}`}
+    </button>
   );
 }
 

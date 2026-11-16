@@ -4,25 +4,9 @@ import { adminCopy as t } from "@/lib/copy";
 import { TEAMS, teamById } from "@/lib/teams";
 import { ROOMS, SCREEN_VIEWS, type AdminPlayer, type GameState, type Room } from "@/lib/types";
 import { useLiveRefresh } from "@/lib/useLiveRefresh";
+import { api, btn, card } from "./api";
+import { ScorePanel } from "./ScorePanel";
 
-async function api<T = unknown>(url: string, method = "GET", body?: unknown): Promise<T> {
-  const res = await fetch(url, {
-    method,
-    headers: body ? { "Content-Type": "application/json" } : undefined,
-    body: body ? JSON.stringify(body) : undefined,
-    cache: "no-store",
-  });
-  if (res.status === 401) {
-    location.href = "/admin/login";
-    throw new Error("unauthorized");
-  }
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error ?? res.statusText);
-  return data as T;
-}
-
-const card = "rounded-xl border border-zinc-800 bg-zinc-900 p-4";
-const btn = "rounded-lg px-3 py-2 font-bold transition disabled:opacity-40";
 
 export function AdminApp() {
   const [state, setState] = useState<GameState | null>(null);
@@ -94,6 +78,7 @@ export function AdminApp() {
         </>
       )}
 
+      <ScorePanel onError={setError} />
       <PlayersPanel onError={setError} />
     </main>
   );
