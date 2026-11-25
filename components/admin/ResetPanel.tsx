@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
-import { adminCopy as t } from "@/lib/copy";
+import { useAdminCopy } from "@/lib/admin-lang";
 import { api, btn, card } from "./api";
 
 export function ResetPanel({ onError }: { onError: (e: string) => void }) {
+  const t = useAdminCopy();
   const [typed, setTyped] = useState("");
   const [busy, setBusy] = useState(false);
 

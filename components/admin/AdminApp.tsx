@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { adminCopy as t } from "@/lib/copy";
+import { setAdminLang, useAdminCopy, useAdminLang } from "@/lib/admin-lang";
+import { ADMIN_LANGS } from "@/lib/copy";
 import { TEAMS, teamById } from "@/lib/teams";
 import { ROOMS, SCREEN_VIEWS, type AdminPlayer, type GameState, type Room } from "@/lib/types";
 import { useLiveRefresh } from "@/lib/useLiveRefresh";
@@ -12,6 +13,7 @@ import { ScorePanel } from "./ScorePanel";
 
 
 export function AdminApp() {
+  const t = useAdminCopy();
   const [state, setState] = useState<GameState | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -38,6 +40,7 @@ export function AdminApp() {
       <header className="flex items-center justify-between">
         <h1 className="text-xl font-black">HIGASHIKAWA GAME · Admin</h1>
         <div className="flex items-center gap-3 text-sm">
+          <LangSwitch />
           <span className={connected ? "text-green-400" : "text-yellow-400"}>
             ● {connected ? "realtime" : "polling"}
           </span>
@@ -99,6 +102,7 @@ function RevealControl({
   onDone: () => void;
   onError: (e: string) => void;
 }) {
+  const t = useAdminCopy();
   const [step, setStep] = useState(0);
   const [busy, setBusy] = useState(false);
 
@@ -145,6 +149,23 @@ function RevealControl({
   );
 }
 
+export function LangSwitch() {
+  const lang = useAdminLang();
+  return (
+    <div className="flex overflow-hidden rounded-lg border border-zinc-700">
+      {ADMIN_LANGS.map((l) => (
+        <button
+          key={l.key}
+          onClick={() => setAdminLang(l.key)}
+          className={`px-2 py-1 ${lang === l.key ? "bg-white font-bold text-black" : "text-zinc-400 hover:bg-zinc-800"}`}
+        >
+          {l.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function Toggle({ label, on, onChange }: { label: string; on: boolean; onChange: (v: boolean) => void }) {
   return (
     <button
@@ -158,6 +179,7 @@ function Toggle({ label, on, onChange }: { label: string; on: boolean; onChange:
 }
 
 function PlayersPanel({ onError }: { onError: (e: string) => void }) {
+  const t = useAdminCopy();
   const [q, setQ] = useState("");
   const [players, setPlayers] = useState<AdminPlayer[]>([]);
   const [pins, setPins] = useState<Record<string, string>>({});

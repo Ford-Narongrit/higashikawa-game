@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import { adminCopy as t } from "@/lib/copy";
+import { useAdminCopy } from "@/lib/admin-lang";
 import { teamById } from "@/lib/teams";
 import { api, btn, card } from "./api";
 
@@ -15,6 +15,7 @@ type BoxRow = {
 };
 
 export function BoxAdmin({ onError }: { onError: (e: string) => void }) {
+  const t = useAdminCopy();
   const [boxes, setBoxes] = useState<BoxRow[]>([]);
   const [count, setCount] = useState("40");
   const [busy, setBusy] = useState(false);
@@ -115,6 +116,7 @@ export function BoxAdmin({ onError }: { onError: (e: string) => void }) {
 }
 
 function PrizeTableEditor({ onError }: { onError: (e: string) => void }) {
+  const t = useAdminCopy();
   const [rows, setRows] = useState<Prize[] | null>(null);
   const [saved, setSaved] = useState(true);
 

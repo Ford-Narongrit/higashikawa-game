@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useState, type FormEvent } from "react";
-import { adminCopy as t } from "@/lib/copy";
+import { useAdminCopy } from "@/lib/admin-lang";
 import { TEAMS, teamById } from "@/lib/teams";
 import type { ScoreEvent, TeamScore } from "@/lib/types";
 import { useLiveRefresh } from "@/lib/useLiveRefresh";
@@ -10,6 +10,7 @@ const GAMES = ["ゲーム1", "ゲーム2"];
 const RANK_POINTS = [300, 200, 100, 0];
 
 export function ScorePanel({ onError }: { onError: (e: string) => void }) {
+  const t = useAdminCopy();
   const [scores, setScores] = useState<TeamScore[]>([]);
   const [events, setEvents] = useState<ScoreEvent[]>([]);
   const [teamId, setTeamId] = useState<number | null>(null);

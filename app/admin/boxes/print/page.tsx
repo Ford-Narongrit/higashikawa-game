@@ -1,12 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
-import { adminCopy as t } from "@/lib/copy";
+import { useAdminCopy } from "@/lib/admin-lang";
 
 type Card = { code: string; svg: string };
 
 /** A4 sheet of QR + code cards to cut out and tape on gift boxes. ?since=ISO prints one batch, ?unused=1 all unused. */
 export default function PrintBoxes() {
+  const t = useAdminCopy();
   const [cards, setCards] = useState<Card[] | null>(null);
 
   useEffect(() => {

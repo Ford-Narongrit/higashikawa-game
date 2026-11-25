@@ -99,8 +99,8 @@ export const copy = {
   },
 } as const;
 
-// ---- หน้าแอดมิน (Ford ใช้คนเดียว จึงเป็นภาษาไทย) ----
-export const adminCopy = {
+// ---- หน้าแอดมิน: มี 3 ภาษา (ไทย / English / 日本語) สลับได้ที่หัวหน้า /admin ----
+const adminTh = {
   loginTitle: "เข้าสู่ระบบแอดมิน",
   password: "รหัสผ่าน",
   login: "เข้าสู่ระบบ",
@@ -172,4 +172,162 @@ export const adminCopy = {
     "ลบผู้เล่น คะแนน รหัสกล่อง และรูปทั้งหมด (รวมไฟล์ใน Storage) แล้วกลับไปก่อนเปิดเผยทีม · เก็บตั้งค่ารางวัล/รูปไว้ · พิมพ์ RESET เพื่อยืนยัน",
   resetButton: "ลบทั้งหมด",
   printCount: (n: number) => `${n} รหัส · 12 ใบต่อหน้า A4`,
-} as const;
+};
+
+export type AdminCopy = typeof adminTh;
+
+const adminEn: AdminCopy = {
+  loginTitle: "Admin login",
+  password: "Password",
+  login: "Log in",
+  wrongPassword: "Wrong password",
+  logout: "Log out",
+
+  screenView: "Stage screen",
+  views: { join: "Join QR", teams: "Teams", leaderboard: "Scores", tree: "3D tree" },
+
+  reveal: "Reveal teams",
+  revealConfirm1: "Are you sure? Everyone will be split into teams now.",
+  revealConfirm2: "Confirm again — this cannot be undone.",
+  revealDone: "Teams revealed",
+  cancel: "Cancel",
+
+  boxOpen: "Gift boxes open",
+  photoOpen: "Photo upload open",
+
+  players: "Players",
+  search: "Search name…",
+  addPlayer: "Add player (no phone)",
+  add: "Add",
+  resetPin: "Reset PIN",
+  newPin: "New PIN",
+  moveTeam: "Move team",
+  delete: "Delete",
+  deleteConfirm: (name: string) => `Delete ${name}? (Points their team already earned stay.)`,
+  noTeam: "No team yet",
+  total: (n: number) => `${n} total`,
+
+  scores: "Scores",
+  points: "Points",
+  label: "Label, e.g. ゲーム1 1位",
+  addScore: "Add points",
+  scoreInvalid: "Pick a team and enter a whole number first",
+  void: "Void",
+  restore: "Restore",
+  voidConfirm: (label: string, points: number) => `Void "${label}" (${points})?`,
+  kinds: { admin: "Game", box: "Box", photo: "Photo" },
+  exportScores: "Export scores (text)",
+  exportCopied: "Copied — paste it into LINE or notes",
+
+  boxes: "Gift boxes",
+  boxStats: (total: number, used: number) => `${total} codes · ${used} used`,
+  generateCodes: "Generate codes",
+  boxCountInvalid: "Enter a number from 1 to 500",
+  printBatch: (n: number) => `Print last batch (${n})`,
+  printUnused: "Print all unused codes",
+  showList: "Show code list",
+  hideList: "Hide list",
+  prizeTable: "Prize table (points / weight → %)",
+  prizeInvalid: "Invalid prize table: points must be whole numbers, weights must be above 0",
+  expectedPoints: (n: number) => `Average points per box ≈ ${n}`,
+  save: "Save",
+  saved: "Saved",
+  print: "Print",
+
+  photos: "Photo review",
+  photoTabs: { pending: "Pending", approved: "Approved", rejected: "Rejected" },
+  photoKeys: "Keys: ← → select · A/Enter approve · X/Backspace reject · Space zoom",
+  noPhotos: "No photos",
+  rejectApproved: "This photo is already approved — rejecting it also voids its points. Continue?",
+  photoPoints: "Points/photo",
+  maxPhotos: "Photos/player",
+  photoCap: "Photo points cap per team (blank = no limit)",
+
+  resetTitle: "Reset all data",
+  resetHelp:
+    "Deletes all players, scores, box codes and photos (including Storage files) and goes back to before the team reveal · Prize/photo settings are kept · Type RESET to confirm",
+  resetButton: "Delete everything",
+  printCount: (n: number) => `${n} codes · 12 per A4 page`,
+};
+
+const adminJa: AdminCopy = {
+  loginTitle: "管理者ログイン",
+  password: "パスワード",
+  login: "ログイン",
+  wrongPassword: "パスワードが違います",
+  logout: "ログアウト",
+
+  screenView: "ステージ画面",
+  views: { join: "参加QR", teams: "チーム", leaderboard: "スコア", tree: "3Dツリー" },
+
+  reveal: "チーム発表",
+  revealConfirm1: "本当によろしいですか？今すぐ全員をチームに分けます。",
+  revealConfirm2: "最終確認 — 取り消しできません。",
+  revealDone: "チーム発表済み",
+  cancel: "キャンセル",
+
+  boxOpen: "プレゼント受付",
+  photoOpen: "写真受付",
+
+  players: "参加者",
+  search: "名前で検索…",
+  addPlayer: "参加者を追加（スマホなし）",
+  add: "追加",
+  resetPin: "PINリセット",
+  newPin: "新しいPIN",
+  moveTeam: "チーム変更",
+  delete: "削除",
+  deleteConfirm: (name: string) => `${name} を削除しますか？（チームの獲得済みポイントは残ります）`,
+  noTeam: "チーム未定",
+  total: (n: number) => `合計 ${n} 人`,
+
+  scores: "スコア",
+  points: "ポイント",
+  label: "ラベル 例: ゲーム1 1位",
+  addScore: "ポイント追加",
+  scoreInvalid: "チームを選び、整数のポイントを入力してください",
+  void: "取消",
+  restore: "元に戻す",
+  voidConfirm: (label: string, points: number) => `「${label}」(${points}) を取り消しますか？`,
+  kinds: { admin: "ゲーム", box: "プレゼント", photo: "写真" },
+  exportScores: "スコアをテキスト出力",
+  exportCopied: "コピーしました — LINEやメモに貼り付けできます",
+
+  boxes: "プレゼント箱",
+  boxStats: (total: number, used: number) => `コード ${total} 件 · 使用済み ${used}`,
+  generateCodes: "コード作成",
+  boxCountInvalid: "1〜500 の数を入力してください",
+  printBatch: (n: number) => `作成したコードを印刷 (${n})`,
+  printUnused: "未使用のコードをすべて印刷",
+  showList: "コード一覧を表示",
+  hideList: "一覧を隠す",
+  prizeTable: "賞品テーブル（ポイント / 重み → %）",
+  prizeInvalid: "賞品テーブルが正しくありません：ポイントは整数、重みは 0 より大きくしてください",
+  expectedPoints: (n: number) => `1箱あたりの平均 ≈ ${n} ポイント`,
+  save: "保存",
+  saved: "保存しました",
+  print: "印刷",
+
+  photos: "写真チェック",
+  photoTabs: { pending: "未確認", approved: "承認", rejected: "却下" },
+  photoKeys: "ショートカット: ← → 選択 · A/Enter 承認 · X/Backspace 却下 · Space 拡大",
+  noPhotos: "写真はありません",
+  rejectApproved: "この写真は承認済みです。却下するとポイントも取り消されます。よろしいですか？",
+  photoPoints: "ポイント/枚",
+  maxPhotos: "枚/人",
+  photoCap: "チームごとの写真ポイント上限（空欄 = 無制限）",
+
+  resetTitle: "全データをリセット",
+  resetHelp:
+    "参加者・スコア・コード・写真（Storage のファイルを含む）をすべて削除し、チーム発表前に戻します · 賞品/写真の設定は残ります · 確認のため RESET と入力してください",
+  resetButton: "すべて削除",
+  printCount: (n: number) => `${n} コード · A4 1枚に 12 枚`,
+};
+
+export const ADMIN_LANGS = [
+  { key: "th", label: "ไทย" },
+  { key: "en", label: "EN" },
+  { key: "ja", label: "日本語" },
+] as const;
+export type AdminLang = (typeof ADMIN_LANGS)[number]["key"];
+export const adminCopies: Record<AdminLang, AdminCopy> = { th: adminTh, en: adminEn, ja: adminJa };

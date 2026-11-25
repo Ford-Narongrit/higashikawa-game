@@ -1,8 +1,10 @@
 "use client";
 import { useState, type FormEvent } from "react";
-import { adminCopy as t } from "@/lib/copy";
+import { useAdminCopy } from "@/lib/admin-lang";
+import { LangSwitch } from "@/components/admin/AdminApp";
 
 export default function AdminLogin() {
+  const t = useAdminCopy();
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -24,7 +26,10 @@ export default function AdminLogin() {
   return (
     <main className="flex min-h-dvh items-center justify-center p-6">
       <form onSubmit={submit} className="flex w-full max-w-sm flex-col gap-4">
-        <h1 className="text-2xl font-bold">{t.loginTitle}</h1>
+        <div className="flex items-center justify-between gap-3">
+          <h1 className="text-2xl font-bold">{t.loginTitle}</h1>
+          <LangSwitch />
+        </div>
         <input
           type="password"
           autoFocus

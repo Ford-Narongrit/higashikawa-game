@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import { adminCopy as t } from "@/lib/copy";
+import { useAdminCopy } from "@/lib/admin-lang";
 import { teamById } from "@/lib/teams";
 import { api, btn, card } from "./api";
 
@@ -17,6 +17,7 @@ type Photo = {
 type Settings = { photo_points: number; max_photos_per_player: number; photo_team_cap: number | null };
 
 export function PhotoReview({ onError }: { onError: (e: string) => void }) {
+  const t = useAdminCopy();
   const [tab, setTab] = useState<Status>("pending");
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [counts, setCounts] = useState<Record<Status, number>>({ pending: 0, approved: 0, rejected: 0 });
@@ -52,7 +53,7 @@ export function PhotoReview({ onError }: { onError: (e: string) => void }) {
       }
       load();
     },
-    [load, onError],
+    [load, onError, t],
   );
 
   const clamped = Math.min(selected, Math.max(0, photos.length - 1));
@@ -155,6 +156,7 @@ export function PhotoReview({ onError }: { onError: (e: string) => void }) {
 }
 
 function PhotoSettings({ onError }: { onError: (e: string) => void }) {
+  const t = useAdminCopy();
   const [s, setS] = useState<Settings | null>(null);
   const [saved, setSaved] = useState(true);
 
